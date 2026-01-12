@@ -1,5 +1,3 @@
-
-
 function VendorMenu({ vendor, goBack }) {
   return (
     <div>
