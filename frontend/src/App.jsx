@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Vendors from "./components/Vendors";
-import Dashboard from "./components/Dashboard";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Vendors from "./pages/Vendors";
+import VendorMenu from "./pages/VendorMenu";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const [page, setPage] = useState("home");
-  const [loggedIn, setLoggedIn] = useState(false);
-
   return (
-    <div>
-      <Navbar go={setPage} loggedIn={loggedIn} logout={() => setLoggedIn(false)} />
-
-      {page === "home" && <Home go={setPage} />}
-      {page === "vendors" && <Vendors />}
-      {page === "login" && <Login login={() => { setLoggedIn(true); setPage("dashboard"); }} />}
-      {page === "dashboard" && <Dashboard />}
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/vendors" element={<Vendors />} />
+        <Route path="/vendors/:id" element={<VendorMenu />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

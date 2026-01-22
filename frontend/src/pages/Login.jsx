@@ -1,10 +1,10 @@
-function Login({ login }) {
+function Login() {
   return (
     <div className="page">
       <h2>Login</h2>
-      <input placeholder="Username" />
+      <input placeholder="Email" />
       <input type="password" placeholder="Password" />
-      <button onClick={login}>Login</button>
+      <button>Login</button>
     </div>
   );
 }

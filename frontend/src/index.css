@@ -1,7 +1,6 @@
-
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   background: #f5f5f5;
 }
 
@@ -15,7 +14,8 @@ body {
 
 .nav-links a {
   margin-left: 20px;
-  cursor: pointer;
+  color: white;
+  text-decoration: none;
 }
 
 .page {
@@ -28,17 +28,10 @@ body {
   margin-top: 40px;
 }
 
-.card {
+.card, .vendor {
   background: white;
   padding: 20px;
   border-radius: 10px;
   cursor: pointer;
-  width: 200px;
-}
-
-.vendor {
-  background: white;
-  padding: 15px;
   margin-bottom: 10px;
-  border-radius: 8px;
 }

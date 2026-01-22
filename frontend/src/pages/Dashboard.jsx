@@ -1,8 +1,8 @@
 function Dashboard() {
   return (
     <div className="page">
-      <h2>My Dashboard</h2>
-      <p>Welcome! You are logged in.</p>
+      <h2>Dashboard</h2>
+      <p>User specific data will appear here.</p>
     </div>
   );
 }
