@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Vendors from "./pages/Vendors";
 import VendorMenu from "./pages/VendorMenu";
 import Dashboard from "./pages/Dashboard";
+import VendorDashboard from "./pages/VendorDashboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/vendors" element={<Vendors />} />
         <Route path="/vendors/:id" element={<VendorMenu />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/vendor-dashboard" element={<VendorDashboard />} />
       </Routes>
     </BrowserRouter>
   );
