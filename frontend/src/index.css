@@ -1,37 +1,33 @@
-body {
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 40px;
-  background: #111;
-  color: white;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
 }
 
-.nav-links a {
-  margin-left: 20px;
-  color: white;
+a {
   text-decoration: none;
+  color: inherit;
 }
 
-.page {
-  padding: 40px;
-}
-
-.roles {
-  display: flex;
-  gap: 30px;
-  margin-top: 40px;
-}
-
-.card, .vendor {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
+button {
   cursor: pointer;
-  margin-bottom: 10px;
+  border: none;
+  outline: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }

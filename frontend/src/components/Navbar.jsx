@@ -1,17 +1,56 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-function Navbar() {
+const Navbar = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
   return (
     <nav className="navbar">
-      <h2 className="logo">StreetVendor</h2>
-      <div className="nav-links">
-        <Link to="/">Home</Link>
-        <Link to="/vendors">Vendors</Link>
-        <Link to="/vendor-dashboard">Vendor Dashboard</Link>
-        <Link to="/login">Login</Link>
+      <div className="navbar-content">
+        <Link to="/">
+          <h1>🍔 HyperLocal Food</h1>
+        </Link>
+        
+        <div className="navbar-links">
+          {user ? (
+            <>
+              {user.role === 'customer' && (
+                <>
+                  <Link to="/vendors">Browse Vendors</Link>
+                  <Link to="/my-orders">My Orders</Link>
+                </>
+              )}
+              
+              {user.role === 'vendor' && (
+                <Link to="/vendor-dashboard">Dashboard</Link>
+              )}
+              
+              {user.role === 'delivery' && (
+                <Link to="/delivery-dashboard">Dashboard</Link>
+              )}
+              
+              <span>Welcome, {user.name}</span>
+              <button onClick={handleLogout} className="logout-btn">
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
