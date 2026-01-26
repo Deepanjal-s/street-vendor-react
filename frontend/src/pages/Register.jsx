@@ -1,10 +1,9 @@
-import React, { useState } from 'react';  // ✅ Fixed import
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../services/api';
 
 const Register = () => {
   const navigate = useNavigate();
-  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,7 +24,6 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    if (error) setError('');  // ✅ Clear error on typing
   };
 
   const handleSubmit = async (e) => {
@@ -35,41 +33,32 @@ const Register = () => {
 
     try {
       const data = await register(formData);
-      
-      // ✅ FIXED: Check for token, not message
-      if (!data.token) {
-        setError(data.message || 'Registration failed');
-        return;  // Don't setLoading(false) here - let finally handle it
-      }
 
-      // ✅ Save token and user data
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({
+      // ✅ FIXED: Save as user object (same as login)
+      const user = {
         id: data._id,
         name: data.name,
         email: data.email,
         role: data.role
-      }));
+      };
 
-      // ✅ Redirect based on role
-      switch (data.role) {
-        case 'customer':
-          navigate('/vendors');
-          break;
-        case 'vendor':
-          navigate('/vendor-dashboard');
-          break;
-        case 'delivery':
-          navigate('/delivery-dashboard');
-          break;
-        default:
-          navigate('/');
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', data.token);
+
+      // Redirect based on role
+      if (data.role === 'customer') {
+        navigate('/vendors');
+      } else if (data.role === 'vendor') {
+        navigate('/vendor-dashboard');
+      } else if (data.role === 'delivery') {
+        navigate('/delivery-dashboard');
       }
+
     } catch (err) {
-      console.error('Registration error:', err);  // ✅ Better debugging
+      console.error(err);
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
-      setLoading(false);  // ✅ ALWAYS resets loading state
+      setLoading(false);
     }
   };
 
@@ -77,22 +66,22 @@ const Register = () => {
     <div className="auth-page">
       <div className="auth-container">
         <h2>Register</h2>
-        
+
         {error && <div className="error-message">{error}</div>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Name</label>
+            <label>Full Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              placeholder="Enter your name"
+              placeholder="Enter your full name"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Email</label>
             <input
@@ -104,7 +93,7 @@ const Register = () => {
               placeholder="Enter your email"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Password</label>
             <input
@@ -114,12 +103,12 @@ const Register = () => {
               onChange={handleChange}
               required
               minLength="6"
-              placeholder="Minimum 6 characters"
+              placeholder="Enter password (min 6 characters)"
             />
           </div>
-          
+
           <div className="form-group">
-            <label>I am a</label>
+            <label>I want to register as</label>
             <select
               name="role"
               value={formData.role}
@@ -131,29 +120,30 @@ const Register = () => {
               <option value="delivery">Delivery Partner</option>
             </select>
           </div>
-          
+
           <div className="form-group">
-            <label>Phone</label>
+            <label>Phone Number</label>
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="Your phone number"
+              placeholder="Enter your phone number"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Address</label>
-            <textarea
+            <input
+              type="text"
               name="address"
               value={formData.address}
               onChange={handleChange}
-              placeholder="Your address"
-              rows="3"
+              placeholder="Enter your address"
             />
           </div>
-          
+
+          {/* Vendor-specific fields */}
           {formData.role === 'vendor' && (
             <>
               <div className="form-group">
@@ -163,21 +153,21 @@ const Register = () => {
                   name="businessName"
                   value={formData.businessName}
                   onChange={handleChange}
-                  placeholder="Your food stall name"
+                  placeholder="Enter your business name"
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Describe your food offerings"
                   rows="3"
+                  placeholder="Describe your food business"
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Cuisine Type</label>
                 <input
@@ -185,32 +175,34 @@ const Register = () => {
                   name="cuisine"
                   value={formData.cuisine}
                   onChange={handleChange}
-                  placeholder="e.g., Indian,Continue10:39 AMChinese, Fast Food"
-/>
-</div>
-          <div className="form-group">
-            <label>Location</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              placeholder="Where is your stall located?"
-            />
-          </div>
-        </>
-      )}
-      
-      <button type="submit" className="btn-primary" disabled={loading}>
-        {loading ? 'Registering...' : 'Register'}
-      </button>
-    </form>
-    
-    <p className="auth-switch">
-      Already have an account? <Link to="/login">Login here</Link>
-    </p>
-  </div>
-</div>
-);
+                  placeholder="e.g., Indian, Chinese, Multi-cuisine"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Business Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  placeholder="Where is your stall/shop located?"
+                />
+              </div>
+            </>
+          )}
+
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          Already have an account? <Link to="/login">Login here</Link>
+        </p>
+      </div>
+    </div>
+  );
 };
+
 export default Register;

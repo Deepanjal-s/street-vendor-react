@@ -23,7 +23,14 @@ export const register = async (userData) => {
     },
     body: JSON.stringify(userData)
   });
-  return response.json();
+  
+  const data = await response.json();
+  
+  if (!response.ok) {
+    throw new Error(data.message || 'Registration failed');
+  }
+  
+  return data;
 };
 
 export const login = async (credentials) => {
@@ -34,7 +41,14 @@ export const login = async (credentials) => {
     },
     body: JSON.stringify(credentials)
   });
-  return response.json();
+  
+  const data = await response.json();
+  
+  if (!response.ok) {
+    throw new Error(data.message || 'Login failed');
+  }
+  
+  return data;
 };
 
 // Vendor APIs
