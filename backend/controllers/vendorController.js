@@ -10,3 +10,8 @@ exports.createVendor = async (req, res) => {
   await vendor.save();
   res.status(201).json(vendor);
 };
+
+exports.getVendorByUser = async (req, res) => {
+  const vendor = await Vendor.findOne({ userId: req.params.userId });
+  res.json(vendor);
+};

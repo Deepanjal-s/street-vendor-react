@@ -11,9 +11,9 @@ router.post("/register", async (req, res) => {
   const user = new User({ name, email, password, role });
   await user.save();
 
-  // auto-create vendor profile
   if (role === "vendor") {
     const vendor = new Vendor({
+      userId: user._id,   // 👈 LINK USER TO VENDOR
       name: name,
       location: "Not set",
       isOpen: false,
@@ -23,6 +23,7 @@ router.post("/register", async (req, res) => {
 
   res.status(201).json({ message: "User registered" });
 });
+
 
 
 // LOGIN  ✅ NEW

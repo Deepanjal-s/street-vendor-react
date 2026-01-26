@@ -1,16 +1,45 @@
-import { useState } from "react";
-import { addMenuItem } from "../services/api";
+import { useEffect, useState } from "react";
+import { addMenuItem, getVendorByUser } from "../services/api";
 
 function VendorDashboard() {
-  const vendorId = localStorage.getItem("vendorId"); // temporary
+  const userId = localStorage.getItem("userId");
+
+  const [vendorId, setVendorId] = useState(null);
   const [itemName, setItemName] = useState("");
   const [price, setPrice] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!userId) {
+      alert("Please login first");
+      return;
+    }
+
+    getVendorByUser(userId)
+      .then((vendor) => {
+        if (!vendor) {
+          alert("Vendor profile not found");
+          return;
+        }
+        setVendorId(vendor._id);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching vendor:", err);
+        alert("Failed to load vendor data");
+      });
+  }, [userId]);
 
   const handleAdd = async () => {
+    if (!itemName || !price) {
+      alert("Please fill all fields");
+      return;
+    }
+
     await addMenuItem({
       vendorId,
       itemName,
-      price
+      price: Number(price), // convert to number
     });
 
     alert("Menu item added");
@@ -18,18 +47,21 @@ function VendorDashboard() {
     setPrice("");
   };
 
+  if (loading) return <p>Loading vendor...</p>;
+
   return (
-    <div className="page">
+    <div>
       <h2>Vendor Dashboard</h2>
 
       <input
-        placeholder="Item Name"
+        placeholder="Item name"
         value={itemName}
         onChange={(e) => setItemName(e.target.value)}
       />
 
       <input
         placeholder="Price"
+        type="number"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
       />

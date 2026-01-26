@@ -24,3 +24,8 @@ export const addMenuItem = async (data) => {
   });
   return res.json();
 };
+
+export const getVendorByUser = async (userId) => {
+  const res = await fetch(`http://localhost:5000/api/vendors/user/${userId}`);
+  return res.json();
+};
