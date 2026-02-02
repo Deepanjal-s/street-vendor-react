@@ -5,29 +5,45 @@ import OrderCard from '../components/OrderCard';
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // ✅ Correct storage usage
-  const userId = localStorage.getItem('userId');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!userId) return;
-
     const loadOrders = async () => {
       try {
-        const data = await getOrdersByUserId(userId);
-        setOrders(data);
+        // ✅ FIXED: Get userId from user object
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        
+        if (!user || !user.id) {
+          setError('Please login to view orders');
+          setLoading(false);
+          return;
+        }
+
+        const data = await getOrdersByUserId(user.id);
+        setOrders(data || []);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching orders:', error);
+        setError('Failed to load orders');
         setLoading(false);
       }
     };
 
     loadOrders();
-  }, [userId]); // ✅ dependency added
+  }, []); // Empty dependency - runs once on mount
 
   if (loading) {
     return <div className="loading">Loading orders...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="container">
+        <div className="error-message" style={{ textAlign: 'center', padding: '2rem' }}>
+          <h3>{error}</h3>
+        </div>
+      </div>
+    );
   }
 
   return (
