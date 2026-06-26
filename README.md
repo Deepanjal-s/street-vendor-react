@@ -146,4 +146,4 @@ npm run dev
 **Deepanjal Shukla**
 
 * GitHub: https://github.com/Deepanjal-s
-* LinkedIn: Add your LinkedIn profile here
+* LinkedIn: https://github.com/deepanjal-shukla
