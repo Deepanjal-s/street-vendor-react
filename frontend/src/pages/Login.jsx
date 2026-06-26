@@ -9,7 +9,7 @@ const Login = () => {
 
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: ''  
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,14 +26,13 @@ const Login = () => {
     setError('');
     setLoading(true);
 
-    console.log('🔍 Attempting login with:', formData.email);
+    console.log(' Attempting login with:', formData.email);
 
     try {
       const data = await login(formData);
       
-      console.log('✅ Login response:', data);
+      console.log('Login response:', data);
 
-      // ✅ FIXED: Save as user object (matching App.jsx ProtectedRoute)
       const user = {
         id: data._id,
         name: data.name,
@@ -44,10 +43,10 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', data.token);
 
-      console.log('💾 Saved user to localStorage:', user);
+      console.log('Saved user to localStorage:', user);
 
       // Redirect based on role
-      console.log('🚀 Navigating to dashboard for role:', data.role);
+      console.log('Navigating to dashboard for role:', data.role);
       
       if (data.role === 'customer') {
         navigate('/vendors');
@@ -58,7 +57,7 @@ const Login = () => {
       }
 
     } catch (err) {
-      console.error('❌ Login error:', err);
+      console.error(' Login error:', err);
       setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);

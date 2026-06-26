@@ -1,5 +1,6 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
+console.log("API_URL =", API_URL);
 // Get token from localStorage
 const getToken = () => {
   return localStorage.getItem('token');
