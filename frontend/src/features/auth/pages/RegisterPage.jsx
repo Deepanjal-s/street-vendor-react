@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { register } from '../../../services/api';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectedRole = location.state?.selectedRole;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'customer',
+    role: selectedRole || 'customer',
     phone: '',
     address: '',
     businessName: '',

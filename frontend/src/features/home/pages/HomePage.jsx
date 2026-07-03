@@ -1,58 +1,32 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import HeroSection from '../components/HeroSection';
+import CustomerSection from '../components/CustomerSection';
+import VendorSection from '../components/VendorSection';
+import DeliverySection from '../components/DeliverySection';
+import AboutSection from '../components/AboutSection';
+import ContactSection from '../components/ContactSection';
+import '../home.css';
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
-
-  const handleRoleSelect = (role) => {
-    if (user) {
-      if (user.role === 'customer') navigate('/vendors');
-      else if (user.role === 'vendor') navigate('/vendor-dashboard');
-      else if (user.role === 'delivery') navigate('/delivery-dashboard');
-    } else {
-      navigate('/login', { state: { selectedRole: role } });
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
-  };
+  }, []);
 
   return (
-    <div className="home-page">
-      <div className="home-hero">
-        <h2>Welcome to HyperLocal Food</h2>
-        <p>Connecting you with local street vendors and delivery partners</p>
-      </div>
-
-      <div className="role-cards">
-        <div className="role-card">
-          <div className="role-card-icon">🍕</div>
-          <h3>Order Food</h3>
-          <p>Discover and order from local street vendors near you</p>
-          <button className="role-card-btn" onClick={() => handleRoleSelect('customer')}>
-            Browse Vendors
-          </button>
-        </div>
-
-        <div className="role-card">
-          <div className="role-card-icon">👨‍🍳</div>
-          <h3>I&apos;m a Vendor</h3>
-          <p>Register your food stall and start receiving orders</p>
-          <button className="role-card-btn" onClick={() => handleRoleSelect('vendor')}>
-            Vendor Portal
-          </button>
-        </div>
-
-        <div className="role-card">
-          <div className="role-card-icon">🛵</div>
-          <h3>Deliver Orders</h3>
-          <p>Earn by delivering food in your neighborhood</p>
-          <button className="role-card-btn" onClick={() => handleRoleSelect('delivery')}>
-            Delivery Portal
-          </button>
-        </div>
-      </div>
+    <div className="landing-page">
+      <HeroSection />
+      <CustomerSection />
+      <VendorSection />
+      <DeliverySection />
+      <AboutSection />
+      <ContactSection />
     </div>
   );
 };
 
 export default HomePage;
-

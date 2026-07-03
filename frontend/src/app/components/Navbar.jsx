@@ -1,14 +1,24 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const isHome = location.pathname === '/';
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/');
+  };
+
+  const scrollToSection = (id) => {
+    if (isHome) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(`/#${id}`);
+    }
   };
 
   return (
@@ -19,6 +29,20 @@ const Navbar = () => {
         </Link>
 
         <div className="navbar-links">
+          <button type="button" className="nav-scroll-link" onClick={() => scrollToSection('home')}>
+            Home
+          </button>
+          <button type="button" className="nav-scroll-link" onClick={() => scrollToSection('about')}>
+            About
+          </button>
+          <button type="button" className="nav-scroll-link" onClick={() => scrollToSection('contact')}>
+            Contact
+          </button>
+
+          <button type="button" className="nav-order-btn" onClick={() => navigate('/vendors')}>
+            Order Now
+          </button>
+
           {user ? (
             <>
               {user.role === 'customer' && (
@@ -50,4 +74,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
