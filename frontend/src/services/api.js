@@ -1,137 +1,101 @@
-const API_URL = import.meta.env.VITE_API_URL;
-
-console.log(API_URL)
-
-// Get token from localStorage
-const getToken = () => {
-  return localStorage.getItem('token');
-};
-
-// Get auth headers
-const getAuthHeaders = () => {
-  const token = getToken();
-  return {
-    'Content-Type': 'application/json',
-    'Authorization': token ? `Bearer ${token}` : ''
-  };
-};
+import { apiFetch, getAuthHeaders } from '../lib/api/client';
 
 // User APIs
 export const register = async (userData) => {
-  const response = await fetch(`${API_URL}/users/register`, {
+  return apiFetch('/users/register', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(userData)
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
   });
-  
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw new Error(data.message || 'Registration failed');
-  }
-  
-  return data;
 };
 
 export const login = async (credentials) => {
-  const response = await fetch(`${API_URL}/users/login`, {
+  return apiFetch('/users/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials),
   });
-  
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw new Error(data.message || 'Login failed');
-  }
-  
-  return data;
+};
+
+// Auth (Checkout OTP) APIs
+export const requestCheckoutOtp = async ({ phone }) => {
+  return apiFetch('/auth/otp/request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone }),
+  });
+};
+
+export const verifyCheckoutOtp = async ({ phone, otp, name }) => {
+  return apiFetch('/auth/otp/verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, otp, name }),
+  });
 };
 
 // Vendor APIs
 export const getAllVendors = async () => {
-  const response = await fetch(`${API_URL}/vendors`);
-  return response.json();
+  return apiFetch('/vendors');
 };
 
 export const getVendorById = async (id) => {
-  const response = await fetch(`${API_URL}/vendors/${id}`);
-  return response.json();
+  return apiFetch(`/vendors/${id}`);
 };
 
 export const getVendorByUserId = async (userId) => {
-  const response = await fetch(`${API_URL}/vendors/user/${userId}`, {
-    headers: getAuthHeaders()
-  });
-  return response.json();
+  return apiFetch(`/vendors/user/${userId}`, { headers: getAuthHeaders() });
 };
 
 // Menu APIs
 export const createMenuItem = async (menuData) => {
-  const response = await fetch(`${API_URL}/menus`, {
+  return apiFetch('/menus', {
     method: 'POST',
     headers: getAuthHeaders(),
-    body: JSON.stringify(menuData)
+    body: JSON.stringify(menuData),
   });
-  return response.json();
 };
 
 export const getMenuByVendorId = async (vendorId) => {
-  const response = await fetch(`${API_URL}/menus/${vendorId}`);
-  return response.json();
+  return apiFetch(`/menus/${vendorId}`);
 };
 
 export const updateMenuItem = async (id, menuData) => {
-  const response = await fetch(`${API_URL}/menus/${id}`, {
+  return apiFetch(`/menus/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),
-    body: JSON.stringify(menuData)
+    body: JSON.stringify(menuData),
   });
-  return response.json();
 };
 
 export const deleteMenuItem = async (id) => {
-  const response = await fetch(`${API_URL}/menus/${id}`, {
+  return apiFetch(`/menus/${id}`, {
     method: 'DELETE',
-    headers: getAuthHeaders()
+    headers: getAuthHeaders(),
   });
-  return response.json();
 };
 
 // Order APIs
 export const createOrder = async (orderData) => {
-  const response = await fetch(`${API_URL}/orders`, {
+  return apiFetch('/orders', {
     method: 'POST',
     headers: getAuthHeaders(),
-    body: JSON.stringify(orderData)
+    body: JSON.stringify(orderData),
   });
-  return response.json();
 };
 
 export const getOrdersByUserId = async (userId) => {
-  const response = await fetch(`${API_URL}/orders/user/${userId}`, {
-    headers: getAuthHeaders()
-  });
-  return response.json();
+  return apiFetch(`/orders/user/${userId}`, { headers: getAuthHeaders() });
 };
 
 export const getAllOrders = async () => {
-  const response = await fetch(`${API_URL}/orders`, {
-    headers: getAuthHeaders()
-  });
-  return response.json();
+  return apiFetch('/orders', { headers: getAuthHeaders() });
 };
 
 export const updateOrderStatus = async (id, status) => {
-  const response = await fetch(`${API_URL}/orders/${id}/status`, {
+  return apiFetch(`/orders/${id}/status`, {
     method: 'PUT',
     headers: getAuthHeaders(),
-    body: JSON.stringify({ status })
+    body: JSON.stringify({ status }),
   });
-  return response.json();
 };

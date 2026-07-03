@@ -1,0 +1,9 @@
+@import 'tailwindcss' reference;
+
+.hero-section {
+    @apply bg-blue-500;
+}
+
+.order-now-button {
+    @apply bg-blue-500;
+}

@@ -17,7 +17,7 @@ const Navbar = () => {
         <Link to="/">
           <h1>🍔 HyperLocal Food</h1>
         </Link>
-        
+
         <div className="navbar-links">
           {user ? (
             <>
@@ -27,15 +27,11 @@ const Navbar = () => {
                   <Link to="/my-orders">My Orders</Link>
                 </>
               )}
-              
-              {user.role === 'vendor' && (
-                <Link to="/vendor-dashboard">Dashboard</Link>
-              )}
-              
-              {user.role === 'delivery' && (
-                <Link to="/delivery-dashboard">Dashboard</Link>
-              )}
-              
+
+              {user.role === 'vendor' && <Link to="/vendor-dashboard">Dashboard</Link>}
+
+              {user.role === 'delivery' && <Link to="/delivery-dashboard">Dashboard</Link>}
+
               <span>Welcome, {user.name}</span>
               <button onClick={handleLogout} className="logout-btn">
                 Logout
@@ -54,3 +50,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { getAllVendors } from '../services/api';
-import VendorCard from '../components/VendorCard';
+import React, { useEffect, useState } from 'react';
+import { getAllVendors } from '../../../services/api';
+import VendorCard from '../ui/VendorCard';
 
-const VendorList = () => {
+const VendorListPage = () => {
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -11,9 +11,9 @@ const VendorList = () => {
       try {
         const data = await getAllVendors();
         setVendors(data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching vendors:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -28,14 +28,14 @@ const VendorList = () => {
   return (
     <div className="vendor-list-page container">
       <h2>Available Vendors</h2>
-      
+
       {vendors.length === 0 ? (
         <div className="empty-state">
           <p>No vendors available at the moment.</p>
         </div>
       ) : (
         <div className="vendor-grid">
-          {vendors.map(vendor => (
+          {vendors.map((vendor) => (
             <VendorCard key={vendor._id} vendor={vendor} />
           ))}
         </div>
@@ -44,4 +44,4 @@ const VendorList = () => {
   );
 };
 
-export default VendorList;
+export default VendorListPage;

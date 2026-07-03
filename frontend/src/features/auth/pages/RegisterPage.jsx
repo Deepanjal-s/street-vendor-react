@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { register } from '../services/api';
+import { register } from '../../../services/api';
 
-const Register = () => {
+const RegisterPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -14,7 +14,7 @@ const Register = () => {
     businessName: '',
     description: '',
     cuisine: '',
-    location: ''
+    location: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const Register = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -34,18 +34,16 @@ const Register = () => {
     try {
       const data = await register(formData);
 
-      // ✅ FIXED: Save as user object (same as login)
       const user = {
         id: data._id,
         name: data.name,
         email: data.email,
-        role: data.role
+        role: data.role,
       };
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', data.token);
 
-      // Redirect based on role
       if (data.role === 'customer') {
         navigate('/vendors');
       } else if (data.role === 'vendor') {
@@ -53,9 +51,7 @@ const Register = () => {
       } else if (data.role === 'delivery') {
         navigate('/delivery-dashboard');
       }
-
     } catch (err) {
-      console.error(err);
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
@@ -109,12 +105,7 @@ const Register = () => {
 
           <div className="form-group">
             <label>I want to register as</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              required
-            >
+            <select name="role" value={formData.role} onChange={handleChange} required>
               <option value="customer">Customer</option>
               <option value="vendor">Vendor</option>
               <option value="delivery">Delivery Partner</option>
@@ -143,7 +134,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Vendor-specific fields */}
           {formData.role === 'vendor' && (
             <>
               <div className="form-group">
@@ -205,4 +195,5 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;
+
